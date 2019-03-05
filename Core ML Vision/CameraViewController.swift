@@ -39,11 +39,11 @@ class CameraViewController: UIViewController {
     // MARK: - Variable Declarations
     
     let visualRecognition: VisualRecognition = {
-        guard let path = Bundle.main.path(forResource: "Credentials", ofType: "plist") else {
+        guard let path = Bundle.main.path(forResource: "Credentials", ofType: "plist"), let apiKey = NSDictionary(contentsOfFile: path)?["apiKey"] as? String else {
             // Please create a Credentials.plist file with your Visual Recognition credentials.
             fatalError()
         }
-        guard let apiKey = NSDictionary(contentsOfFile: path)?["apiKey"] as? String else {
+        if apiKey == "YOUR_API_KEY" {
             // No Visual Recognition API key found. Make sure you add your API key to the Credentials.plist file.
             fatalError()
         }
