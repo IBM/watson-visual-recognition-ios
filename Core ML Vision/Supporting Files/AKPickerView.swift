@@ -55,6 +55,7 @@ private protocol AKCollectionViewLayoutDelegate {
  */
 private class AKCollectionViewCell: UICollectionViewCell {
     var label: UILabel!
+    var labelView: UIView!
     var imageView: UIImageView!
     var font = UIFont.systemFont(ofSize: UIFont.systemFontSize)
     var highlightedFont = UIFont.systemFont(ofSize: UIFont.systemFontSize)
@@ -68,7 +69,7 @@ private class AKCollectionViewCell: UICollectionViewCell {
             animation.duration = 0.15
             self.label.layer.add(animation, forKey: "")
             self.label.font = self.isSelected ? self.highlightedFont : self.font
-            self.backgroundColor = self.isSelected ? self.highlightedTextbackgroundColor : self.textbackgroundColor
+            self.labelView.backgroundColor = self.isSelected ? self.highlightedTextbackgroundColor : self.textbackgroundColor
         }
     }
     
@@ -76,10 +77,14 @@ private class AKCollectionViewCell: UICollectionViewCell {
         self.layer.isDoubleSided = false
         self.layer.shouldRasterize = true
         self.layer.rasterizationScale = UIScreen.main.scale
-        self.backgroundColor = UIColor.clear
-        self.layer.masksToBounds = true
-        self.layer.cornerRadius = 12.0
         
+        self.labelView = UIView(frame: self.contentView.bounds)
+        self.labelView.backgroundColor = UIColor.clear
+        self.labelView.layer.masksToBounds = true
+        self.labelView.layer.cornerRadius = 12.0
+        self.labelView.autoresizingMask = [.flexibleTopMargin, .flexibleLeftMargin, .flexibleBottomMargin, .flexibleRightMargin]
+        self.contentView.addSubview(self.labelView)
+    
         self.label = UILabel(frame: self.contentView.bounds)
         self.label.textAlignment = .center
         self.label.textColor = UIColor.gray
@@ -88,7 +93,7 @@ private class AKCollectionViewCell: UICollectionViewCell {
         self.label.highlightedTextColor = UIColor.black
         self.label.font = self.font
         self.label.autoresizingMask = [.flexibleTopMargin, .flexibleLeftMargin, .flexibleBottomMargin, .flexibleRightMargin]
-        self.contentView.addSubview(self.label)
+        self.labelView.addSubview(self.label)
         
         self.imageView = UIImageView(frame: self.contentView.bounds)
         self.imageView.backgroundColor = UIColor.clear
@@ -124,7 +129,7 @@ private class AKCollectionViewLayout: UICollectionViewFlowLayout {
     var maxAngle: CGFloat!
     
     func initialize() {
-        self.sectionInset = UIEdgeInsets.init(top: 7.0, left: 7.0, bottom: 12.0, right: 12.0)
+        self.sectionInset = UIEdgeInsets.init(top: 0.0, left: 0.0, bottom: 0.0, right: 0.0)
         self.scrollDirection = .horizontal
         self.minimumLineSpacing = 0.0
     }
@@ -257,7 +262,7 @@ public class AKPickerView: UIView, UICollectionViewDataSource, UICollectionViewD
     @IBInspectable public lazy var highlightedTextbackgroundColor: UIColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.6)
     
     /// Readwrite. A float value which indicates the spacing between cells.
-    @IBInspectable public var interitemSpacing: CGFloat = 24.0
+    @IBInspectable public var interitemSpacing: CGFloat = 24.0 + 18.0
     
     /// Readwrite. The style of the picker view. See AKPickerViewStyle.
     public var pickerViewStyle = AKPickerViewStyle.flat
@@ -498,7 +503,9 @@ public class AKPickerView: UIView, UICollectionViewDataSource, UICollectionViewD
             cell.highlightedFont = self.highlightedFont
             cell.textbackgroundColor = self.textbackgroundColor
             cell.highlightedTextbackgroundColor = self.highlightedTextbackgroundColor
-            cell.label.bounds = CGRect(origin: CGPoint.zero, size: self.sizeForString(title as NSString))
+            let stringSize = self.sizeForString(title as NSString)
+            cell.label.bounds = CGRect(origin: CGPoint.zero, size: stringSize)
+            cell.labelView.bounds = CGRect(origin: CGPoint.zero, size: CGSize(width: stringSize.width + 24, height: 24))
             if let delegate = self.delegate {
                 delegate.pickerView?(self, configureLabel: cell.label, forItem: indexPath.item)
                 if let margin = delegate.pickerView?(self, marginForItem: indexPath.item) {
@@ -527,7 +534,7 @@ public class AKPickerView: UIView, UICollectionViewDataSource, UICollectionViewD
     }
     
     public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        return 0.0 //18.0
+        return 0.0
     }
     
     public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
