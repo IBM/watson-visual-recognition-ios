@@ -396,7 +396,7 @@ class CameraViewController: UIViewController {
             return
         }
         if defaultClassifiers.contains(where: { $0.id == classifierId }) {
-            updateModelButton.isHidden = false
+            updateModelButton.isHidden = true
         } else {
             updateModelButton.isEnabled = true
             do {
