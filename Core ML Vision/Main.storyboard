@@ -53,7 +53,7 @@
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gZh-H7-kgW">
-                                <rect key="frame" x="149" y="537" width="77" height="77"/>
+                                <rect key="frame" x="149" y="567" width="77" height="77"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="77" id="Z5d-EL-0fy"/>
                                     <constraint firstAttribute="height" constant="77" id="ftZ-NX-hpX"/>
@@ -64,7 +64,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="O2c-uk-frK">
-                                <rect key="frame" x="20" y="548" width="55" height="55"/>
+                                <rect key="frame" x="20" y="578" width="55" height="55"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="55" id="gx8-vK-Zhc"/>
                                     <constraint firstAttribute="height" constant="55" id="xlE-cJ-Jpa"/>
@@ -92,28 +92,8 @@
                                     <action selector="sliderValueChanged:" destination="MPu-h4-IWa" eventType="valueChanged" id="bwk-Nd-afe"/>
                                 </connections>
                             </slider>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="BottomScrim" translatesAutoresizingMaskIntoConstraints="NO" id="seJ-jc-sD1">
-                                <rect key="frame" x="0.0" y="579" width="375" height="88"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="88" id="4M7-UT-9fS"/>
-                                </constraints>
-                            </imageView>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Select" translatesAutoresizingMaskIntoConstraints="NO" id="XXR-IR-8AI">
-                                <rect key="frame" x="181.5" y="661" width="12" height="6"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="6" id="aX6-kO-Mf0"/>
-                                    <constraint firstAttribute="width" constant="12" id="dnc-OG-6sd"/>
-                                </constraints>
-                            </imageView>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="93d-rB-7ng" customClass="AKPickerView" customModule="Core_ML_Vision" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="617" width="375" height="50"/>
-                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="50" id="BnA-Ck-qed"/>
-                                </constraints>
-                            </view>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gXC-TK-JrW">
-                                <rect key="frame" x="300" y="548" width="55" height="55"/>
+                                <rect key="frame" x="300" y="578" width="55" height="55"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="55" id="FiN-yq-XL7"/>
                                     <constraint firstAttribute="width" constant="55" id="UnN-9Q-ahs"/>
@@ -123,10 +103,16 @@
                                     <action selector="checkUpdates" destination="MPu-h4-IWa" eventType="touchUpInside" id="df6-bM-WEM"/>
                                 </connections>
                             </button>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="93d-rB-7ng" customClass="AKPickerView" customModule="Core_ML_Vision" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="514" width="375" height="50"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="50" id="BnA-Ck-qed"/>
+                                </constraints>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="QGZ-b4-zCe" firstAttribute="bottom" secondItem="93d-rB-7ng" secondAttribute="bottom" id="1Mi-Gc-sSV"/>
                             <constraint firstItem="93d-rB-7ng" firstAttribute="leading" secondItem="QGZ-b4-zCe" secondAttribute="leading" id="1d2-OV-weX"/>
                             <constraint firstItem="Q0m-3C-Pg4" firstAttribute="leading" secondItem="oBa-W5-Ood" secondAttribute="leading" id="5SX-mK-Mvl"/>
                             <constraint firstAttribute="bottom" secondItem="Q0m-3C-Pg4" secondAttribute="bottom" id="6m9-El-Q6w"/>
@@ -135,13 +121,12 @@
                             <constraint firstAttribute="trailing" secondItem="Q0m-3C-Pg4" secondAttribute="trailing" id="B6n-V7-fwu"/>
                             <constraint firstItem="O2c-uk-frK" firstAttribute="leading" secondItem="QGZ-b4-zCe" secondAttribute="leading" constant="20" id="Bah-qu-JBV"/>
                             <constraint firstItem="QGZ-b4-zCe" firstAttribute="trailing" secondItem="gXC-TK-JrW" secondAttribute="trailing" constant="20" id="D5e-Jd-ktx"/>
+                            <constraint firstItem="gZh-H7-kgW" firstAttribute="top" secondItem="93d-rB-7ng" secondAttribute="bottom" constant="3" id="DEh-Ye-Q8T"/>
                             <constraint firstAttribute="bottomMargin" secondItem="Iqh-pk-Qts" secondAttribute="bottom" constant="20" id="Dmq-Jh-iFa"/>
                             <constraint firstAttribute="trailing" secondItem="Cut-U1-rk1" secondAttribute="trailing" id="E6A-QZ-cyO"/>
                             <constraint firstItem="nUF-ND-VCt" firstAttribute="leading" secondItem="oBa-W5-Ood" secondAttribute="leading" id="EYB-AI-Ffb"/>
                             <constraint firstItem="jV6-kf-Rrz" firstAttribute="leading" secondItem="oBa-W5-Ood" secondAttribute="leading" constant="20" id="HAe-Jc-sWp"/>
-                            <constraint firstItem="XXR-IR-8AI" firstAttribute="centerX" secondItem="oBa-W5-Ood" secondAttribute="centerX" id="IEo-W6-FiR"/>
                             <constraint firstItem="gZh-H7-kgW" firstAttribute="centerY" secondItem="O2c-uk-frK" secondAttribute="centerY" id="JbK-mV-wKA"/>
-                            <constraint firstItem="seJ-jc-sD1" firstAttribute="leading" secondItem="QGZ-b4-zCe" secondAttribute="leading" id="Jbz-nj-as9"/>
                             <constraint firstAttribute="bottom" secondItem="Cut-U1-rk1" secondAttribute="bottom" id="MCz-us-8An"/>
                             <constraint firstItem="93d-rB-7ng" firstAttribute="trailing" secondItem="QGZ-b4-zCe" secondAttribute="trailing" id="NYv-ZV-0JY"/>
                             <constraint firstItem="Iqh-pk-Qts" firstAttribute="leading" secondItem="oBa-W5-Ood" secondAttribute="leadingMargin" constant="20" id="OOR-M9-Lkj"/>
@@ -149,15 +134,13 @@
                             <constraint firstItem="QGZ-b4-zCe" firstAttribute="trailing" secondItem="C0k-SZ-2ab" secondAttribute="trailing" constant="20" id="S1O-00-XG0"/>
                             <constraint firstItem="PQ4-s0-jJR" firstAttribute="top" secondItem="QGZ-b4-zCe" secondAttribute="top" constant="20" id="SBR-ap-OWn"/>
                             <constraint firstItem="gZh-H7-kgW" firstAttribute="centerX" secondItem="oBa-W5-Ood" secondAttribute="centerX" id="SM1-Th-JHm"/>
-                            <constraint firstItem="seJ-jc-sD1" firstAttribute="bottom" secondItem="QGZ-b4-zCe" secondAttribute="bottom" id="TSG-pG-T9Z"/>
                             <constraint firstItem="QGZ-b4-zCe" firstAttribute="trailing" secondItem="PQ4-s0-jJR" secondAttribute="trailing" constant="20" id="Via-RW-unY"/>
-                            <constraint firstItem="QGZ-b4-zCe" firstAttribute="bottom" secondItem="XXR-IR-8AI" secondAttribute="bottom" id="WXw-0e-3Ph"/>
                             <constraint firstItem="pUB-PT-eoR" firstAttribute="leading" secondItem="oBa-W5-Ood" secondAttribute="leading" id="X6A-uN-JTq"/>
                             <constraint firstItem="PQ4-s0-jJR" firstAttribute="leading" secondItem="jV6-kf-Rrz" secondAttribute="trailing" constant="20" id="Zqe-VO-43M"/>
                             <constraint firstItem="gXC-TK-JrW" firstAttribute="centerY" secondItem="gZh-H7-kgW" secondAttribute="centerY" id="bXc-Hq-Y3z"/>
                             <constraint firstItem="Cut-U1-rk1" firstAttribute="leading" secondItem="oBa-W5-Ood" secondAttribute="leading" id="d0k-tx-Loq"/>
                             <constraint firstItem="4t6-Dp-qzK" firstAttribute="leading" secondItem="oBa-W5-Ood" secondAttribute="leading" id="eyz-dC-CA8"/>
-                            <constraint firstItem="QGZ-b4-zCe" firstAttribute="bottom" secondItem="gZh-H7-kgW" secondAttribute="bottom" constant="53" id="fWm-mC-0EY"/>
+                            <constraint firstItem="QGZ-b4-zCe" firstAttribute="bottom" secondItem="gZh-H7-kgW" secondAttribute="bottom" constant="23" id="fWm-mC-0EY"/>
                             <constraint firstItem="nUF-ND-VCt" firstAttribute="top" secondItem="oBa-W5-Ood" secondAttribute="top" id="h46-7j-g2z"/>
                             <constraint firstItem="Iqh-pk-Qts" firstAttribute="top" secondItem="oBa-W5-Ood" secondAttribute="topMargin" constant="20" id="k1v-ah-d5D"/>
                             <constraint firstItem="Cut-U1-rk1" firstAttribute="top" secondItem="oBa-W5-Ood" secondAttribute="top" id="mSU-jC-wbY"/>
@@ -166,7 +149,6 @@
                             <constraint firstItem="pUB-PT-eoR" firstAttribute="centerY" secondItem="oBa-W5-Ood" secondAttribute="centerY" id="pxE-cT-OTc"/>
                             <constraint firstAttribute="bottom" secondItem="nUF-ND-VCt" secondAttribute="bottom" id="rzH-rM-aeH"/>
                             <constraint firstAttribute="trailing" secondItem="pUB-PT-eoR" secondAttribute="trailing" id="tlg-dE-bfb"/>
-                            <constraint firstItem="seJ-jc-sD1" firstAttribute="trailing" secondItem="QGZ-b4-zCe" secondAttribute="trailing" id="uug-41-eUW"/>
                             <constraint firstItem="pUB-PT-eoR" firstAttribute="top" secondItem="oBa-W5-Ood" secondAttribute="top" id="uvo-Pf-Wrd"/>
                             <constraint firstItem="Q0m-3C-Pg4" firstAttribute="top" secondItem="oBa-W5-Ood" secondAttribute="top" id="uy5-4c-ByL"/>
                             <constraint firstAttribute="trailingMargin" secondItem="Iqh-pk-Qts" secondAttribute="trailing" constant="20" id="wzM-R3-90X"/>
@@ -385,12 +367,10 @@
     </scenes>
     <resources>
         <image name="Background" width="1242" height="2208"/>
-        <image name="BottomScrim" width="41" height="133"/>
         <image name="Cancel" width="100" height="100"/>
         <image name="Capture" width="232" height="232"/>
         <image name="Choose" width="165" height="165"/>
         <image name="Focus" width="1242" height="1242"/>
-        <image name="Select" width="36" height="18"/>
         <image name="Update" width="165" height="165"/>
     </resources>
 </document>

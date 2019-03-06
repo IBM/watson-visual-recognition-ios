@@ -58,23 +58,40 @@ private class AKCollectionViewCell: UICollectionViewCell {
     var imageView: UIImageView!
     var font = UIFont.systemFont(ofSize: UIFont.systemFontSize)
     var highlightedFont = UIFont.systemFont(ofSize: UIFont.systemFontSize)
-    var _selected: Bool = false {
+    var highlightedTextbackgroundColor = UIColor.clear
+    var textbackgroundColor = UIColor.clear
+    
+    override var isSelected: Bool  {
         didSet(selected) {
             let animation = CATransition()
             animation.type = CATransitionType.fade
             animation.duration = 0.15
             self.label.layer.add(animation, forKey: "")
             self.label.font = self.isSelected ? self.highlightedFont : self.font
+            self.backgroundColor = self.isSelected ? self.highlightedTextbackgroundColor : self.textbackgroundColor
         }
     }
+    
+//    var _selected: Bool = false {
+//        didSet(selected) {
+//            let animation = CATransition()
+//            animation.type = CATransitionType.fade
+//            animation.duration = 0.15
+//            self.label.layer.add(animation, forKey: "")
+//            self.label.font = self.isSelected ? self.highlightedFont : self.font
+//            self.backgroundColor = self.isSelected ? self.highlightedTextbackgroundColor : self.textbackgroundColor
+//        }
+//    }
     
     func initialize() {
         self.layer.isDoubleSided = false
         self.layer.shouldRasterize = true
         self.layer.rasterizationScale = UIScreen.main.scale
+        self.backgroundColor = UIColor.clear
+        self.layer.masksToBounds = true
+        self.layer.cornerRadius = 12.0
         
         self.label = UILabel(frame: self.contentView.bounds)
-        self.label.backgroundColor = UIColor.clear
         self.label.textAlignment = .center
         self.label.textColor = UIColor.gray
         self.label.numberOfLines = 1
@@ -118,7 +135,8 @@ private class AKCollectionViewLayout: UICollectionViewFlowLayout {
     var maxAngle: CGFloat!
     
     func initialize() {
-        self.sectionInset = UIEdgeInsets.init(top: 0.0, left: 0.0, bottom: 0.0, right: 0.0)
+        self.sectionInset = UIEdgeInsets.init(top: 7.0, left: 7.0, bottom: 12.0, right: 12.0)
+//        self.sectionInset = UIEdgeInsets.init(top: 0.0, left: 0.0, bottom: 0.0, right: 0.0)
         self.scrollDirection = .horizontal
         self.minimumLineSpacing = 0.0
     }
@@ -181,6 +199,49 @@ private class AKCollectionViewLayout: UICollectionViewFlowLayout {
         }
     }
     
+//    override func targetContentOffset(forProposedContentOffset proposedContentOffset: CGPoint, withScrollingVelocity velocity: CGPoint) -> CGPoint {
+//        guard let collectionView = collectionView else { return super.targetContentOffset(forProposedContentOffset: proposedContentOffset, withScrollingVelocity: velocity) }
+//        let parent = super.targetContentOffset(forProposedContentOffset: proposedContentOffset, withScrollingVelocity: velocity)
+//
+////        let itemSpace = itemSize.width + minimumInteritemSpacing
+////        var currentItemIdx = round(collectionView.contentOffset.x / itemSpace)
+//
+//        let indexPath = self.collectionView!.indexPathForItem(at: CGPoint(x: collectionView.contentOffset.x + (self.collectionView?.center.x)!, y: 25.0))
+//
+//        var currentItemIdx = indexPath!.item
+//
+//        let currentCenter = (self.collectionView!.cellForItem(at: indexPath!)?.contentView.center.x)!
+//        var currentOffsetCenter = collectionView.contentOffset.x + currentCenter
+//        print("currentCenter: \(currentOffsetCenter)")
+//
+//        // Skip to the next cell, if there is residual scrolling velocity left.
+//        // This helps to prevent glitches
+//        let vX = velocity.x
+//        if vX > 0 {
+//            currentItemIdx += 1
+//        } else if vX < 0 {
+//            currentItemIdx -= 1
+//        }
+//
+//
+//        let targetCenter = (self.collectionView!.cellForItem(at: IndexPath(item: currentItemIdx, section: 0))?.contentView.center.x)!
+//        var targetOffsetCenter = collectionView.contentOffset.x
+//        if vX > 0 {
+//            targetOffsetCenter += targetCenter + currentCenter
+//        } else if vX < 0 {
+//            targetOffsetCenter -= targetCenter - currentCenter
+//        }
+//
+//
+//        print("targetCenter: \(targetOffsetCenter)")
+//
+//
+////        let nearestPageOffset = currentItemIdx * itemSpace
+//        return CGPoint(x: targetOffsetCenter, y: parent.y)
+////        return parent
+////        return CGPoint(x: newOffset, y: parent.y)
+//    }
+    
 }
 
 // MARK: AKPickerViewDelegateIntercepter
@@ -237,22 +298,25 @@ public class AKPickerView: UIView, UICollectionViewDataSource, UICollectionViewD
         }
     }
     /// Readwrite. A font which used in NOT selected cells.
-    public lazy var font = UIFont.systemFont(ofSize: 20)
+    public lazy var font = UIFont.boldSystemFont(ofSize: 14)
     
     /// Readwrite. A font which used in selected cells.
-    public lazy var highlightedFont = UIFont.boldSystemFont(ofSize: 20)
+    public lazy var highlightedFont = UIFont.boldSystemFont(ofSize: 14)
     
     /// Readwrite. A color of the text on NOT selected cells.
-    @IBInspectable public lazy var textColor: UIColor = UIColor.darkGray
+    @IBInspectable public lazy var textColor: UIColor = UIColor(red: 1, green: 1, blue: 1, alpha: 0.6)
     
     /// Readwrite. A color of the text on selected cells.
-    @IBInspectable public lazy var highlightedTextColor: UIColor = UIColor.black
+    @IBInspectable public lazy var highlightedTextColor: UIColor = UIColor.white
+    
+    @IBInspectable public lazy var textbackgroundColor: UIColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.3)
+    @IBInspectable public lazy var highlightedTextbackgroundColor: UIColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.6)
     
     /// Readwrite. A float value which indicates the spacing between cells.
-    @IBInspectable public var interitemSpacing: CGFloat = 0.0
+    @IBInspectable public var interitemSpacing: CGFloat = 24.0
     
     /// Readwrite. The style of the picker view. See AKPickerViewStyle.
-    public var pickerViewStyle = AKPickerViewStyle.wheel
+    public var pickerViewStyle = AKPickerViewStyle.flat
     
     /// Readwrite. A float value which determines the perspective representation which used when using AKPickerViewStyle.Wheel style.
     @IBInspectable public var viewDepth: CGFloat = 1000.0 {
@@ -265,7 +329,7 @@ public class AKPickerView: UIView, UICollectionViewDataSource, UICollectionViewD
         }
     }
     /// Readwrite. A boolean value indicates whether the mask is disabled.
-    public var maskDisabled: Bool! = nil {
+    public var maskDisabled: Bool! = true {
         didSet {
             self.collectionView.layer.mask = self.maskDisabled == true ? nil : {
                 let maskLayer = CAGradientLayer()
@@ -516,6 +580,8 @@ public class AKPickerView: UIView, UICollectionViewDataSource, UICollectionViewD
             cell.label.font = self.font
             cell.font = self.font
             cell.highlightedFont = self.highlightedFont
+            cell.textbackgroundColor = self.textbackgroundColor
+            cell.highlightedTextbackgroundColor = self.highlightedTextbackgroundColor
             cell.label.bounds = CGRect(origin: CGPoint.zero, size: self.sizeForString(title as NSString))
             if let delegate = self.delegate {
                 delegate.pickerView?(self, configureLabel: cell.label, forItem: indexPath.item)
@@ -526,13 +592,13 @@ public class AKPickerView: UIView, UICollectionViewDataSource, UICollectionViewD
         } else if let image = self.dataSource?.pickerView?(self, imageForItem: indexPath.item) {
             cell.imageView.image = image
         }
-        cell._selected = (indexPath.item == self.selectedItem)
+        cell.isSelected = (indexPath.item == self.selectedItem)
         return cell
     }
     
     // MARK: UICollectionViewDelegateFlowLayout
     public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        var size = CGSize(width: self.interitemSpacing, height: collectionView.bounds.size.height)
+        var size = CGSize(width: self.interitemSpacing, height: 24) //collectionView.bounds.size.height)
         if let title = self.dataSource?.pickerView?(self, titleForItem: indexPath.item) {
             size.width += self.sizeForString(title as NSString).width
             if let margin = self.delegate?.pickerView?(self, marginForItem: indexPath.item) {
@@ -545,7 +611,7 @@ public class AKPickerView: UIView, UICollectionViewDataSource, UICollectionViewD
     }
     
     public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        return 0.0
+        return 0.0 //18.0
     }
     
     public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
@@ -558,9 +624,13 @@ public class AKPickerView: UIView, UICollectionViewDataSource, UICollectionViewD
         let firstSize = self.collectionView(collectionView, layout: collectionView.collectionViewLayout, sizeForItemAt: firstIndexPath)
         let lastIndexPath = IndexPath(item: number - 1, section: section)
         let lastSize = self.collectionView(collectionView, layout: collectionView.collectionViewLayout, sizeForItemAt: lastIndexPath)
+//        return UIEdgeInsets.init(
+//            top: 0, left: (collectionView.bounds.size.width - firstSize.width) / 2,
+//            bottom: 0, right: (collectionView.bounds.size.width - lastSize.width) / 2
+//        )
         return UIEdgeInsets.init(
-            top: 0, left: (collectionView.bounds.size.width - firstSize.width) / 2,
-            bottom: 0, right: (collectionView.bounds.size.width - lastSize.width) / 2
+            top: (collectionView.bounds.size.height - 24) / 2, left: (collectionView.bounds.size.width - firstSize.width) / 2,
+            bottom: (collectionView.bounds.size.height - 24) / 2, right: (collectionView.bounds.size.width - lastSize.width) / 2
         )
     }
     
@@ -572,16 +642,62 @@ public class AKPickerView: UIView, UICollectionViewDataSource, UICollectionViewD
     // MARK: UIScrollViewDelegate
     public func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         self.delegate?.scrollViewDidEndDecelerating?(scrollView)
-        self.didEndScrolling()
-    }
-    
-    public func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-        self.delegate?.scrollViewDidEndDragging?(scrollView, willDecelerate: decelerate)
-        if !decelerate {
-            self.didEndScrolling()
+        let center = self.convert(self.collectionView.center, to: self.collectionView)
+        if let indexPath = self.collectionView.indexPathForItem(at: center) {
+            self.collectionView.selectItem(
+                at: IndexPath(item: indexPath.item, section: 0),
+                animated: true,
+                scrollPosition: UICollectionView.ScrollPosition())
+            self.selectedItem = indexPath.item
+            self.delegate?.pickerView?(self, didSelectItem: indexPath.item)
         }
     }
+//
+//    public func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+//        self.delegate?.scrollViewDidEndDragging?(scrollView, willDecelerate: decelerate)
+//        if !decelerate {
+//            self.didEndScrolling()
+//        }
+//    }
     
+    
+    public func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
+        self.autoSnapping(velocity: velocity, targetOffset: targetContentOffset)
+    }
+    
+    func autoSnapping(velocity: CGPoint, targetOffset: UnsafeMutablePointer<CGPoint>) {
+        guard let collectionViewCenter = self.collectionView?.center else {
+            return
+        }
+        let centerPoint = CGPoint(x: targetOffset.pointee.x + collectionViewCenter.x, y: collectionViewCenter.y)
+        guard let indexPath = self.collectionView.indexPathForItem(at: centerPoint) else {
+            return
+        }
+        
+        var offset = targetOffset.pointee
+ 
+        let vX = velocity.x
+        let velocityBuffer: CGFloat = 0.0
+        var index = indexPath.item
+        if vX > velocityBuffer {
+            index += 1
+        } else if vX < -velocityBuffer {
+            index -= 1
+        }
+        
+        index = min(max(index, 0), self.collectionView.numberOfItems(inSection: 0) - 1)
+        
+        guard let nextCellLayout = self.collectionView.layoutAttributesForItem(at: IndexPath(item: index, section: 0)) else {
+            return
+        }
+        
+        let nextCellHalfWidth = (nextCellLayout.frame.width / 2)
+        
+        offset.x = nextCellLayout.frame.minX + nextCellHalfWidth - collectionViewCenter.x
+        
+        targetOffset.pointee = offset
+    }
+
     public func scrollViewDidScroll(_ scrollView: UIScrollView) {
         self.delegate?.scrollViewDidScroll?(scrollView)
         CATransaction.begin()

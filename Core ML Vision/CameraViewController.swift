@@ -81,6 +81,7 @@ class CameraViewController: UIViewController {
     var heatmaps = [String: HeatmapImages]()
     var selectionIndex = 0
     var classifiers = [String]()
+    var loading = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -89,13 +90,6 @@ class CameraViewController: UIViewController {
         
         pickerView.delegate = self
         pickerView.dataSource = self
-        pickerView.interitemSpacing = CGFloat(25.0)
-        pickerView.pickerViewStyle = .flat
-        pickerView.maskDisabled = true
-        pickerView.font = UIFont.boldSystemFont(ofSize: 14)
-        pickerView.highlightedFont = UIFont.boldSystemFont(ofSize: 14)
-        pickerView.highlightedTextColor = UIColor.white
-        pickerView.textColor = UIColor(red: 1, green: 1, blue: 1, alpha: 0.6)
         if let lastClassifier = UserDefaults.standard.string(forKey: "classifier_id") {
             classifiers.append(lastClassifier)
         }
@@ -320,6 +314,7 @@ class CameraViewController: UIViewController {
     
     func showResultsUI(for image: UIImage) {
         imageView.image = image
+        pickerView.isHidden = true
         imageView.isHidden = false
         simulatorTextView.isHidden = true
         closeButton.isHidden = false
@@ -347,6 +342,7 @@ class CameraViewController: UIViewController {
         outlineView.isHidden = true
         alphaSlider.isHidden = true
         closeButton.isHidden = true
+        pickerView.isHidden = false
         choosePhotoButton.isHidden = false
         updateModelButton.isHidden = false
         dismissResults()
