@@ -37,6 +37,8 @@ class CameraViewController: UIViewController {
     @IBOutlet weak var captureButton: UIButton!
     @IBOutlet weak var updateModelButton: UIButton!
     @IBOutlet weak var choosePhotoButton: UIButton!
+    @IBOutlet weak var flashButton: UIButton!
+    @IBOutlet weak var flipButton: UIButton!
     @IBOutlet weak var closeButton: UIButton!
     @IBOutlet weak var alphaSlider: UISlider!
     @IBOutlet weak var pickerView: AKPickerView!
@@ -332,6 +334,8 @@ class CameraViewController: UIViewController {
         choosePhotoButton.isHidden = true
         updateModelButton.isHidden = true
         focusView.isHidden = true
+        flashButton.isHidden = true
+        flipButton.isHidden = true
     }
     
     func resetUI() {
@@ -355,6 +359,8 @@ class CameraViewController: UIViewController {
         pickerView.isHidden = false
         choosePhotoButton.isHidden = false
         updateModelButton.isHidden = false
+        flashButton.isHidden = false
+        flipButton.isHidden = false
         dismissResults()
     }
     
