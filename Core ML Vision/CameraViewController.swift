@@ -64,9 +64,16 @@ class CameraViewController: UIViewController {
     
     let photoOutput = AVCapturePhotoOutput()
     lazy var captureSession: AVCaptureSession? = {
-        guard let backCamera = AVCaptureDevice.default(for: .video),
-            let input = try? AVCaptureDeviceInput(device: backCamera) else {
+        guard let backCamera = { () -> AVCaptureDevice? in
+            if let device = AVCaptureDevice.default(.builtInDualCamera, for: .video, position: .back) {
+                return device
+            } else if let device = AVCaptureDevice.default(.builtInWideAngleCamera, for: .video, position: .back) {
+                return device
+            } else {
                 return nil
+            }
+        }(), let input = try? AVCaptureDeviceInput(device: backCamera) else {
+            return nil
         }
         
         let captureSession = AVCaptureSession()
@@ -98,6 +105,7 @@ class CameraViewController: UIViewController {
     var selectionIndex = 0
     var classifiers = [ListItem]()
     var isLoading = false
+    var back = true
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -439,6 +447,30 @@ class CameraViewController: UIViewController {
                 }
             }
         }
+    }
+    
+    @IBAction func flipPhoto() {
+        guard let input = captureSession?.inputs.first else {
+            return
+        }
+        captureSession?.removeInput(input)
+        
+        back = !back
+        
+        let device = { () -> AVCaptureDevice? in
+            if let device = AVCaptureDevice.default(.builtInDualCamera, for: .video, position: back ? .back : .front) {
+                return device
+            } else if let device = AVCaptureDevice.default(.builtInWideAngleCamera, for: .video, position: back ? .back : .front) {
+                return device
+            } else {
+                return nil
+            }
+        }()
+        
+        guard let sdevice = device, let newInput = try? AVCaptureDeviceInput(device: sdevice) else {
+            return
+        }
+        captureSession?.addInput(newInput)
     }
     
     @IBAction func capturePhoto() {
