@@ -19,6 +19,11 @@ import AVFoundation
 
 import VisualRecognitionV3
 
+struct ListItem {
+    var id: String
+    var name: String
+}
+
 class CameraViewController: UIViewController {
 
     // MARK: - IBOutlets
@@ -74,42 +79,47 @@ class CameraViewController: UIViewController {
         return nil
     }()
     
-    let defaultClassifiers = ["default", "explicit", "food"]
+    let defaultClassifiers = [
+        ListItem(id: "default", name: "general"),
+        ListItem(id: "explicit", name: "explicit"),
+        ListItem(id: "food", name: "food")
+    ]
     
     var editedImage = UIImage()
     var originalConfs = [ClassResult]()
     var heatmaps = [String: HeatmapImages]()
     var selectionIndex = 0
-    var classifiers = [String]()
-    var loading = false
+    var classifiers = [ListItem]()
+    var isLoading = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        captureSession?.startRunning()
-        resetUI()
-        
         pickerView.delegate = self
         pickerView.dataSource = self
-        if let lastClassifier = UserDefaults.standard.string(forKey: "classifier_id") {
-            classifiers.append(lastClassifier)
-        }
+        isLoading = true
         pickerView.reloadData()
+        resetUI()
         
-        var modelList = [String]()
+        // Start capture session after UI setup.
+        captureSession?.startRunning()
+        
+        var modelList = [ListItem]()
         let dispatchGroup = DispatchGroup()
         dispatchGroup.enter()
         visualRecognition.listClassifiers() { response, error in
             defer { dispatchGroup.leave() }
-            guard let classifiers = response?.result?.classifiers else {
+            guard var classifiers = response?.result?.classifiers else {
                 return
             }
+            classifiers = classifiers.filter { $0.status == "ready" }
             for classifier in classifiers {
-                modelList.append(classifier.classifierID)
+                modelList.append(ListItem(id: classifier.classifierID, name: classifier.name))
             }
         }
         
         dispatchGroup.notify(queue: .main) {
             self.classifiers = modelList
+            self.isLoading = false
             self.pickerView.reloadData()
             self.pickerView.selectItem(self.selectionIndex)
         }
@@ -493,26 +503,27 @@ extension CameraViewController: TableViewControllerSelectionDelegate {
 
 extension CameraViewController: AKPickerViewDataSource {
     func numberOfItemsInPickerView(_ pickerView: AKPickerView) -> Int {
-        return defaultClassifiers.count + max(classifiers.count, 1)
+        return (isLoading ? 1 : defaultClassifiers.count + classifiers.count)
     }
     
     func pickerView(_ pickerView: AKPickerView, titleForItem item: Int) -> String {
-        if item < defaultClassifiers.count {
-            if defaultClassifiers[item] == UserDefaults.standard.string(forKey: "classifier_id") {
+        if isLoading {
+            return "Loading..."
+        } else {
+            if item < defaultClassifiers.count {
+                if defaultClassifiers[item].id == UserDefaults.standard.string(forKey: "classifier_id") {
+                    selectionIndex = item
+                }
+                return defaultClassifiers[item].name.uppercased().truncate(to: 20)
+            }
+            
+            let scaledItem = item - defaultClassifiers.count
+            
+            if classifiers[scaledItem].id == UserDefaults.standard.string(forKey: "classifier_id") {
                 selectionIndex = item
             }
-            return defaultClassifiers[item]
+            return classifiers[scaledItem].name.uppercased().truncate(to: 20)
         }
-        if classifiers.count <= 0 {
-            return "Loading..."
-        }
-        
-        let scaledItem = item - defaultClassifiers.count
-        
-        if classifiers[scaledItem] == UserDefaults.standard.string(forKey: "classifier_id") {
-            selectionIndex = item
-        }
-        return classifiers[scaledItem]
     }
 }
 
@@ -527,22 +538,36 @@ extension CameraViewController: AKPickerViewDelegate {
             updateModelButton.isHidden = false
             choosePhotoButton.isEnabled = true
             captureButton.isEnabled = true
-            let classifierId = defaultClassifiers[item]
+            let classifierId = defaultClassifiers[item].id
             UserDefaults.standard.set(classifierId, forKey: "classifier_id")
         } else {
             if classifiers.count > 0 {
                 choosePhotoButton.isEnabled = true
                 captureButton.isEnabled = true
                 updateModelButton.isEnabled = true
-                let classifierId = classifiers[item - defaultClassifiers.count]
+                let classifierId = classifiers[item - defaultClassifiers.count].id
                 UserDefaults.standard.set(classifierId, forKey: "classifier_id")
                 do {
                     let _ = try visualRecognition.getLocalModel(classifierID: classifierId)
+                    // TODO: show spinner until we check for updates
                     updateModelButton.isHidden = true
                 } catch {
                     updateModelButton.isHidden = false
                 }
             }
+        }
+    }
+}
+
+extension String {
+    func truncate(to length: Int) -> String {
+        if self.count > length {
+            var newString = self
+            let range = NSRange(location: length / 2, length: self.count - length)
+            newString.replaceSubrange(Range(range, in: newString)!, with: "...")
+            return newString
+        } else {
+            return self
         }
     }
 }
