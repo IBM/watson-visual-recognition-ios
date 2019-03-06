@@ -8,6 +8,26 @@ git clone github.com/IBM/watson-visual-recognition-ios.git &&
 cd watson-visual-recognition-ios
 ```
 
+### Carthage
+You can install Carthage with [Homebrew](http://brew.sh/):
+
+```bash
+brew update
+brew install carthage
+```
+
+If your project does not have a Cartfile yet, generate a Cartfile with the Watson Developer Cloud Swift SDK: 
+
+```
+echo 'github "watson-developer-cloud/swift-sdk" ~> 1.4.0' > Cartfile
+```
+
+Then run the following command to build the dependencies and frameworks:
+
+```bash
+carthage update --platform iOS
+```
+
 ## Install Xcode
 In order to develop for iOS we need to first install the latest version of Xcode, which can be found on the [Mac App Store](https://itunes.apple.com/us/app/xcode/id497799835?mt=12)
 
