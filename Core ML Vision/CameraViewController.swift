@@ -41,6 +41,11 @@ class CameraViewController: UIViewController {
     @IBOutlet weak var flipButton: UIButton!
     @IBOutlet weak var closeButton: UIButton!
     @IBOutlet weak var alphaSlider: UISlider!
+    @IBOutlet weak var checkStatusIndicatorView: UIActivityIndicatorView! {
+        didSet {
+            checkStatusIndicatorView.hidesWhenStopped = true
+        }
+    }
     @IBOutlet weak var pickerView: AKPickerView!
     
     // MARK: - Variable Declarations
@@ -336,6 +341,7 @@ class CameraViewController: UIViewController {
         focusView.isHidden = true
         flashButton.isHidden = true
         flipButton.isHidden = true
+        checkStatusIndicatorView.stopAnimating()
     }
     
     func resetUI() {
@@ -362,6 +368,43 @@ class CameraViewController: UIViewController {
         flashButton.isHidden = false
         flipButton.isHidden = false
         dismissResults()
+        invalidateStatus()
+    }
+    
+    func invalidateStatus() {
+        checkStatusIndicatorView.stopAnimating()
+        updateModelButton.isEnabled = false
+        
+        if isLoading {
+            choosePhotoButton.isEnabled = false
+            captureButton.isEnabled = false
+            return
+        } else {
+            choosePhotoButton.isEnabled = true
+            captureButton.isEnabled = true
+        }
+        
+        guard let classifierId = UserDefaults.standard.string(forKey: "classifier_id") else {
+            return
+        }
+        if defaultClassifiers.contains(where: { $0.id == classifierId }) {
+            updateModelButton.isHidden = false
+        } else {
+            updateModelButton.isEnabled = true
+            do {
+                let _ = try visualRecognition.getLocalModel(classifierID: classifierId)
+                updateModelButton.isHidden = true
+                checkStatusIndicatorView.startAnimating()
+                visualRecognition.checkLocalModelStatus(classifierID: classifierId) { modelUpToDate in
+                    self.checkStatusIndicatorView.stopAnimating()
+                    if !modelUpToDate {
+                        self.updateModelButton.isHidden = false
+                    }
+                }
+            } catch {
+                updateModelButton.isHidden = false
+            }
+        }
     }
     
     // MARK: - IBActions
@@ -537,31 +580,14 @@ extension CameraViewController: AKPickerViewDataSource {
 
 extension CameraViewController: AKPickerViewDelegate {
     func pickerView(_ pickerView: AKPickerView, didSelectItem item: Int) {
-        updateModelButton.isEnabled = false
-        choosePhotoButton.isEnabled = false
-        captureButton.isEnabled = false
         if item < defaultClassifiers.count {
-            updateModelButton.isHidden = false
-            choosePhotoButton.isEnabled = true
-            captureButton.isEnabled = true
             let classifierId = defaultClassifiers[item].id
             UserDefaults.standard.set(classifierId, forKey: "classifier_id")
         } else {
-            if classifiers.count > 0 {
-                choosePhotoButton.isEnabled = true
-                captureButton.isEnabled = true
-                updateModelButton.isEnabled = true
-                let classifierId = classifiers[item - defaultClassifiers.count].id
-                UserDefaults.standard.set(classifierId, forKey: "classifier_id")
-                do {
-                    let _ = try visualRecognition.getLocalModel(classifierID: classifierId)
-                    // TODO: show spinner until we check for updates
-                    updateModelButton.isHidden = true
-                } catch {
-                    updateModelButton.isHidden = false
-                }
-            }
+            let classifierId = classifiers[item - defaultClassifiers.count].id
+            UserDefaults.standard.set(classifierId, forKey: "classifier_id")
         }
+        invalidateStatus()
     }
 }
 

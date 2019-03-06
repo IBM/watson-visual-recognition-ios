@@ -126,6 +126,9 @@
                                 </constraints>
                                 <state key="normal" image="Flash"/>
                             </button>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="white" translatesAutoresizingMaskIntoConstraints="NO" id="ZGk-ek-4eX">
+                                <rect key="frame" x="317.5" y="595.5" width="20" height="20"/>
+                            </activityIndicatorView>
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
@@ -156,6 +159,7 @@
                             <constraint firstItem="pUB-PT-eoR" firstAttribute="leading" secondItem="oBa-W5-Ood" secondAttribute="leading" id="X6A-uN-JTq"/>
                             <constraint firstItem="E9f-y0-eGQ" firstAttribute="top" secondItem="QGZ-b4-zCe" secondAttribute="top" id="ZHb-7A-1m9"/>
                             <constraint firstItem="PQ4-s0-jJR" firstAttribute="leading" secondItem="jV6-kf-Rrz" secondAttribute="trailing" constant="20" id="Zqe-VO-43M"/>
+                            <constraint firstItem="ZGk-ek-4eX" firstAttribute="centerX" secondItem="gXC-TK-JrW" secondAttribute="centerX" id="aJL-Qo-nAF"/>
                             <constraint firstItem="gXC-TK-JrW" firstAttribute="centerY" secondItem="gZh-H7-kgW" secondAttribute="centerY" id="bXc-Hq-Y3z"/>
                             <constraint firstItem="Cut-U1-rk1" firstAttribute="leading" secondItem="oBa-W5-Ood" secondAttribute="leading" id="d0k-tx-Loq"/>
                             <constraint firstItem="4t6-Dp-qzK" firstAttribute="leading" secondItem="oBa-W5-Ood" secondAttribute="leading" id="eyz-dC-CA8"/>
@@ -171,6 +175,7 @@
                             <constraint firstAttribute="trailing" secondItem="pUB-PT-eoR" secondAttribute="trailing" id="tlg-dE-bfb"/>
                             <constraint firstItem="pUB-PT-eoR" firstAttribute="top" secondItem="oBa-W5-Ood" secondAttribute="top" id="uvo-Pf-Wrd"/>
                             <constraint firstItem="Q0m-3C-Pg4" firstAttribute="top" secondItem="oBa-W5-Ood" secondAttribute="top" id="uy5-4c-ByL"/>
+                            <constraint firstItem="ZGk-ek-4eX" firstAttribute="centerY" secondItem="gXC-TK-JrW" secondAttribute="centerY" id="wE8-ry-6Jd"/>
                             <constraint firstAttribute="trailingMargin" secondItem="Iqh-pk-Qts" secondAttribute="trailing" constant="20" id="wzM-R3-90X"/>
                             <constraint firstItem="PQ4-s0-jJR" firstAttribute="centerY" secondItem="jV6-kf-Rrz" secondAttribute="centerY" id="y2A-ij-1td"/>
                         </constraints>
@@ -185,6 +190,7 @@
                         <outlet property="alphaSlider" destination="jV6-kf-Rrz" id="piG-B4-VIA"/>
                         <outlet property="cameraView" destination="Cut-U1-rk1" id="Drx-Vj-hkf"/>
                         <outlet property="captureButton" destination="gZh-H7-kgW" id="ekE-dA-IKu"/>
+                        <outlet property="checkStatusIndicatorView" destination="ZGk-ek-4eX" id="6c6-EQ-pjQ"/>
                         <outlet property="choosePhotoButton" destination="O2c-uk-frK" id="hdF-Th-fXv"/>
                         <outlet property="closeButton" destination="PQ4-s0-jJR" id="BIn-42-G6c"/>
                         <outlet property="flashButton" destination="E9f-y0-eGQ" id="Zh6-b5-ZsI"/>
