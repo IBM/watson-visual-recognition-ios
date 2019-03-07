@@ -12,7 +12,6 @@ cd watson-visual-recognition-ios
 You can install Carthage with [Homebrew](http://brew.sh/):
 
 ```bash
-brew update
 brew install carthage
 ```
 
