@@ -167,8 +167,10 @@ class CameraViewController: UIViewController {
         }
         
         if classifierId == "detect_faces" {
+            SwiftSpinner.show("detecting")
             visualRecognition.detectFaces(image: image) { response, error in
                 DispatchQueue.main.async {
+                    SwiftSpinner.hide()
                     guard let faces = response?.result?.images.first?.faces else {
                         return
                     }
@@ -236,8 +238,10 @@ class CameraViewController: UIViewController {
                 }
             }
         } catch {
+            SwiftSpinner.show("detecting")
             visualRecognition.classify(image: croppedImage, threshold: localThreshold, classifierIDs: [classifierId]) { response, error in
                 DispatchQueue.main.async {
+                    SwiftSpinner.hide()
                     // Make sure that an image was successfully classified.
                     guard let classifications = response?.result?.images.first?.classifiers.first?.classes else {
                         return
