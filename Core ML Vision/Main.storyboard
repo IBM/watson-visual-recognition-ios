@@ -34,6 +34,17 @@
                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Focus" translatesAutoresizingMaskIntoConstraints="NO" id="nUF-ND-VCt">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                             </imageView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Hh1-O0-ARW">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </view>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" text="Note: You can Drag and Drop images onto the simulator to add them to the device." textAlignment="center" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Iqh-pk-Qts">
+                                <rect key="frame" x="36" y="40" width="303" height="607"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <color key="textColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <fontDescription key="fontDescription" style="UICTFontTextStyleCaption1"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                            </textView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PQ4-s0-jJR">
                                 <rect key="frame" x="321.5" y="40" width="33.5" height="33.5"/>
                                 <constraints>
@@ -45,13 +56,6 @@
                                     <action selector="reset" destination="MPu-h4-IWa" eventType="touchUpInside" id="N2z-6g-FFa"/>
                                 </connections>
                             </button>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" text="Note: You can Drag and Drop images onto the simulator to add them to the device." textAlignment="center" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Iqh-pk-Qts">
-                                <rect key="frame" x="36" y="40" width="303" height="607"/>
-                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <color key="textColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <fontDescription key="fontDescription" style="UICTFontTextStyleCaption1"/>
-                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
-                            </textView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gZh-H7-kgW">
                                 <rect key="frame" x="149" y="567" width="77" height="77"/>
                                 <constraints>
@@ -132,10 +136,12 @@
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstItem="Hh1-O0-ARW" firstAttribute="leading" secondItem="oBa-W5-Ood" secondAttribute="leading" id="0Fi-ol-tb9"/>
                             <constraint firstItem="93d-rB-7ng" firstAttribute="leading" secondItem="QGZ-b4-zCe" secondAttribute="leading" id="1d2-OV-weX"/>
                             <constraint firstItem="Q0m-3C-Pg4" firstAttribute="leading" secondItem="oBa-W5-Ood" secondAttribute="leading" id="5SX-mK-Mvl"/>
                             <constraint firstAttribute="bottom" secondItem="Q0m-3C-Pg4" secondAttribute="bottom" id="6m9-El-Q6w"/>
                             <constraint firstItem="gZh-H7-kgW" firstAttribute="centerY" secondItem="C0k-SZ-2ab" secondAttribute="centerY" id="9jL-Ca-Mzg"/>
+                            <constraint firstItem="Hh1-O0-ARW" firstAttribute="top" secondItem="oBa-W5-Ood" secondAttribute="top" id="Aa5-OY-xrk"/>
                             <constraint firstItem="4t6-Dp-qzK" firstAttribute="top" secondItem="oBa-W5-Ood" secondAttribute="top" id="Asq-fK-mrE"/>
                             <constraint firstAttribute="trailing" secondItem="Q0m-3C-Pg4" secondAttribute="trailing" id="B6n-V7-fwu"/>
                             <constraint firstItem="O2c-uk-frK" firstAttribute="leading" secondItem="QGZ-b4-zCe" secondAttribute="leading" constant="20" id="Bah-qu-JBV"/>
@@ -161,6 +167,7 @@
                             <constraint firstItem="PQ4-s0-jJR" firstAttribute="leading" secondItem="jV6-kf-Rrz" secondAttribute="trailing" constant="20" id="Zqe-VO-43M"/>
                             <constraint firstItem="ZGk-ek-4eX" firstAttribute="centerX" secondItem="gXC-TK-JrW" secondAttribute="centerX" id="aJL-Qo-nAF"/>
                             <constraint firstItem="gXC-TK-JrW" firstAttribute="centerY" secondItem="gZh-H7-kgW" secondAttribute="centerY" id="bXc-Hq-Y3z"/>
+                            <constraint firstAttribute="trailing" secondItem="Hh1-O0-ARW" secondAttribute="trailing" id="c2f-3a-ws3"/>
                             <constraint firstItem="Cut-U1-rk1" firstAttribute="leading" secondItem="oBa-W5-Ood" secondAttribute="leading" id="d0k-tx-Loq"/>
                             <constraint firstItem="4t6-Dp-qzK" firstAttribute="leading" secondItem="oBa-W5-Ood" secondAttribute="leading" id="eyz-dC-CA8"/>
                             <constraint firstItem="QGZ-b4-zCe" firstAttribute="bottom" secondItem="gZh-H7-kgW" secondAttribute="bottom" constant="23" id="fWm-mC-0EY"/>
@@ -173,6 +180,7 @@
                             <constraint firstItem="pUB-PT-eoR" firstAttribute="centerY" secondItem="oBa-W5-Ood" secondAttribute="centerY" id="pxE-cT-OTc"/>
                             <constraint firstAttribute="bottom" secondItem="nUF-ND-VCt" secondAttribute="bottom" id="rzH-rM-aeH"/>
                             <constraint firstAttribute="trailing" secondItem="pUB-PT-eoR" secondAttribute="trailing" id="tlg-dE-bfb"/>
+                            <constraint firstAttribute="bottom" secondItem="Hh1-O0-ARW" secondAttribute="bottom" id="uEo-5R-daI"/>
                             <constraint firstItem="pUB-PT-eoR" firstAttribute="top" secondItem="oBa-W5-Ood" secondAttribute="top" id="uvo-Pf-Wrd"/>
                             <constraint firstItem="Q0m-3C-Pg4" firstAttribute="top" secondItem="oBa-W5-Ood" secondAttribute="top" id="uy5-4c-ByL"/>
                             <constraint firstItem="ZGk-ek-4eX" firstAttribute="centerY" secondItem="gXC-TK-JrW" secondAttribute="centerY" id="wE8-ry-6Jd"/>
@@ -188,6 +196,7 @@
                     </view>
                     <connections>
                         <outlet property="alphaSlider" destination="jV6-kf-Rrz" id="piG-B4-VIA"/>
+                        <outlet property="boundingBoxView" destination="Hh1-O0-ARW" id="5EG-a6-8Zj"/>
                         <outlet property="cameraView" destination="Cut-U1-rk1" id="Drx-Vj-hkf"/>
                         <outlet property="captureButton" destination="gZh-H7-kgW" id="ekE-dA-IKu"/>
                         <outlet property="checkStatusIndicatorView" destination="ZGk-ek-4eX" id="6c6-EQ-pjQ"/>

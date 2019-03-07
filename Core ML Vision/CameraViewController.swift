@@ -41,6 +41,7 @@ class CameraViewController: UIViewController {
     @IBOutlet weak var flipButton: UIButton!
     @IBOutlet weak var closeButton: UIButton!
     @IBOutlet weak var alphaSlider: UISlider!
+    @IBOutlet weak var boundingBoxView: UIView!
     @IBOutlet weak var checkStatusIndicatorView: UIActivityIndicatorView! {
         didSet {
             checkStatusIndicatorView.hidesWhenStopped = true
@@ -95,6 +96,7 @@ class CameraViewController: UIViewController {
     
     let defaultClassifiers = [
         ListItem(id: "default", name: "general"),
+        ListItem(id: "detect_faces", name: "faces"),
         ListItem(id: "explicit", name: "explicit"),
         ListItem(id: "food", name: "food")
     ]
@@ -113,6 +115,13 @@ class CameraViewController: UIViewController {
         isLoading = true
         pickerView.reloadData()
         resetUI()
+        
+        // Only show a max of 20 bounding boxes.
+        for _ in 0 ..< 20 {
+            let box = UIBoundingBox()
+            box.addToLayer(boundingBoxView.layer)
+            boundingBoxes.append(box)
+        }
         
         // Start capture session after UI setup.
         captureSession?.startRunning()
@@ -149,6 +158,7 @@ class CameraViewController: UIViewController {
     
     // MARK: - Image Classification
     
+    var boundingBoxes: [UIBoundingBox] = []
     func classifyImage(_ image: UIImage, localThreshold: Double = 0.0) {
         guard let croppedImage = image.cropToCenter(targetSize: CGSize(width: 224, height: 224)) else {
             return
@@ -157,6 +167,63 @@ class CameraViewController: UIViewController {
         showResultsUI(for: image)
         
         guard let classifierId = UserDefaults.standard.string(forKey: "classifier_id") else {
+            return
+        }
+        
+        if classifierId == "detect_faces" {
+            visualRecognition.detectFaces(image: image) { response, error in
+                DispatchQueue.main.async {
+                    guard let faces = response?.result?.images.first?.faces else {
+                        return
+                    }
+                    
+                    let imageWidth = image.size.width
+                    let imageHeight = image.size.height
+                    let viewWidth = self.boundingBoxView.layer.frame.width
+                    let viewHeight = self.boundingBoxView.layer.frame.height
+                    
+                    let imageAspectRatio = imageWidth / imageHeight
+                    let viewAspectRatio = viewWidth / viewHeight
+                    
+                    var scale: CGFloat = 0.0
+                    var xOffset: CGFloat = 0.0
+                    var yOffset: CGFloat = 0.0
+                    if imageAspectRatio > viewAspectRatio {
+                        // image is wider than view
+                        let scaledImageWidth = viewHeight * imageAspectRatio
+                        scale = viewHeight / imageHeight
+                        xOffset = (scaledImageWidth - viewWidth) / 2
+                        yOffset = 0.0
+                    } else {
+                        // image is taller than view
+                        let scaledImageHeight = viewWidth / imageAspectRatio
+                        scale = viewWidth / imageWidth
+                        xOffset = 0.0
+                        yOffset = (scaledImageHeight - viewHeight) / 2
+                    }
+                    
+                    let topKFaces = faces.prefix(self.boundingBoxes.count)
+                    for (index, face) in topKFaces.enumerated() {
+                        guard let faceBox = face.faceLocation else {
+                            return
+                        }
+                        
+                        let label = "\(face.gender?.genderLabel ?? "") \(face.age?.min ?? 0) - \(face.age?.max ?? 99)"
+                        
+                        let rect = CGRect(x: faceBox.left, y: faceBox.top, width: faceBox.width, height: faceBox.height)
+                        
+                        let transform = CGAffineTransform(translationX: -xOffset, y: -yOffset)
+                        let scale = CGAffineTransform(scaleX: scale, y: scale)
+                        let scaledRect = rect.applying(scale).applying(transform)
+                        
+                        let color = UIColor(red: 36/255, green: 101/255, blue: 255/255, alpha: 1.0)
+                        self.boundingBoxes[index].show(frame: scaledRect, label: label, color: color)
+                    }
+                    for index in topKFaces.count ..< 20 {
+                        self.boundingBoxes[index].hide()
+                    }
+                }
+            }
             return
         }
         
@@ -239,6 +306,9 @@ class CameraViewController: UIViewController {
         flipButton.isHidden = false
         dismissResults()
         invalidateStatus()
+        for boundingBox in boundingBoxes {
+            boundingBox.hide()
+        }
     }
     
     func invalidateStatus() {
