@@ -36,24 +36,7 @@ class CameraViewController: UIViewController {
     @IBOutlet weak var simulatorTextView: UITextView!
     @IBOutlet weak var captureButton: UIButton!
     @IBOutlet weak var updateModelButton: UIButton!
-    @IBOutlet weak var choosePhotoButton: UIButton! {
-        didSet {
-            let options = PHFetchOptions()
-            options.fetchLimit = 1
-            options.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
-            guard let asset = PHAsset.fetchAssets(with: .image, options: options).firstObject else {
-                return
-            }
-            let scale = UIScreen.main.scale
-            let transform = CGAffineTransform(scaleX: scale, y: scale)
-            let targetRect = choosePhotoButton.frame.applying(transform)
-            PHImageManager.default().requestImage(for: asset, targetSize: targetRect.size, contentMode: .aspectFill, options: nil) { (image, _) in
-                self.choosePhotoButton.setImage(image, for: .normal)
-                self.choosePhotoButton.layer.masksToBounds = true
-                self.choosePhotoButton.layer.cornerRadius = self.choosePhotoButton.frame.size.height / 2
-            }
-        }
-    }
+    @IBOutlet weak var choosePhotoButton: UIButton!
     @IBOutlet weak var flashButton: UIButton!
     @IBOutlet weak var flipButton: UIButton!
     @IBOutlet weak var closeButton: UIButton!

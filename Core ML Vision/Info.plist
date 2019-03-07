@@ -22,8 +22,6 @@
 	<true/>
 	<key>NSCameraUsageDescription</key>
 	<string>Used to classify images with visual recognition</string>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Used to get images to classify with visual recognition</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
