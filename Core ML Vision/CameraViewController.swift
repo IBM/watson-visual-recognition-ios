@@ -365,9 +365,9 @@ extension CameraViewController {
         
         switch error.code {
         case 0:
-            errorMessage = "Please check your Object Storage API key in `Credentials.plist` and try again."
+            errorMessage = "Please check your Visual Recognition API key in `Credentials.plist` and try again."
         case 404:
-            errorMessage = "We couldn't find a bucket with ID: \"\(modelId)\""
+            errorMessage = "We couldn't find a classifier with ID: \"\(modelId)\""
         case 500:
             errorMessage = "Internal server error. Please try again."
         case -1009:
