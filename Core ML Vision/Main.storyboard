@@ -129,6 +129,10 @@
                                     <constraint firstAttribute="width" constant="55" id="Oni-cE-gWS"/>
                                 </constraints>
                                 <state key="normal" image="Flash"/>
+                                <state key="selected" image="FlashActive"/>
+                                <connections>
+                                    <action selector="toggleFlashWithSender:" destination="MPu-h4-IWa" eventType="touchUpInside" id="pyA-kH-2Ud"/>
+                                </connections>
                             </button>
                             <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="white" translatesAutoresizingMaskIntoConstraints="NO" id="ZGk-ek-4eX">
                                 <rect key="frame" x="317.5" y="595.5" width="20" height="20"/>
@@ -408,6 +412,7 @@
         <image name="Capture" width="232" height="232"/>
         <image name="Choose" width="165" height="165"/>
         <image name="Flash" width="165" height="165"/>
+        <image name="FlashActive" width="165" height="165"/>
         <image name="Flip" width="165" height="165"/>
         <image name="Focus" width="1242" height="1242"/>
         <image name="Update" width="165" height="165"/>

@@ -64,16 +64,11 @@ class CameraViewController: UIViewController {
     }()
     
     let photoOutput = AVCapturePhotoOutput()
+    lazy var currentDevice = { () -> AVCaptureDevice? in
+        return getDevice(for: .back)
+    }()
     lazy var captureSession: AVCaptureSession? = {
-        guard let backCamera = { () -> AVCaptureDevice? in
-            if let device = AVCaptureDevice.default(.builtInDualCamera, for: .video, position: .back) {
-                return device
-            } else if let device = AVCaptureDevice.default(.builtInWideAngleCamera, for: .video, position: .back) {
-                return device
-            } else {
-                return nil
-            }
-        }(), let input = try? AVCaptureDeviceInput(device: backCamera) else {
+        guard let backCamera = currentDevice, let input = try? AVCaptureDeviceInput(device: backCamera) else {
             return nil
         }
         
@@ -107,6 +102,7 @@ class CameraViewController: UIViewController {
     var classifiers = [ListItem]()
     var isLoading = false
     var back = true
+    var flash = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -376,32 +372,55 @@ class CameraViewController: UIViewController {
         }
     }
     
+    func getDevice(for position: AVCaptureDevice.Position) -> AVCaptureDevice? {
+        if let device = AVCaptureDevice.default(.builtInDualCamera, for: .video, position: position) {
+            return device
+        }
+        if let device = AVCaptureDevice.default(.builtInWideAngleCamera, for: .video, position: position) {
+            return device
+        }
+        return nil
+    }
+    
     @IBAction func flipPhoto() {
-        guard let input = captureSession?.inputs.first else {
+        guard let input = captureSession?.inputs.first, let position = currentDevice?.position else {
             return
         }
         captureSession?.removeInput(input)
         
-        back = !back
-        
-        let device = { () -> AVCaptureDevice? in
-            if let device = AVCaptureDevice.default(.builtInDualCamera, for: .video, position: back ? .back : .front) {
-                return device
-            } else if let device = AVCaptureDevice.default(.builtInWideAngleCamera, for: .video, position: back ? .back : .front) {
-                return device
-            } else {
-                return nil
+        let flippedPosition = { () -> AVCaptureDevice.Position in
+            if position == .back {
+                return .front
             }
+            return .back
         }()
         
-        guard let sdevice = device, let newInput = try? AVCaptureDeviceInput(device: sdevice) else {
+        guard let device = getDevice(for: flippedPosition) , let newInput = try? AVCaptureDeviceInput(device: device) else {
             return
         }
+        currentDevice = device
         captureSession?.addInput(newInput)
     }
     
+    @IBAction func toggleFlash(sender: UIButton) {
+        flash = !flash
+        flashButton.isSelected = flash
+    }
+    
     @IBAction func capturePhoto() {
-        photoOutput.capturePhoto(with: AVCapturePhotoSettings(), delegate: self)
+        guard let device = currentDevice else {
+            return
+        }
+        
+        let settings = AVCapturePhotoSettings()
+        
+        if device.hasFlash && flash {
+            settings.flashMode = .on
+        } else {
+            settings.flashMode = .off
+        }
+        
+        photoOutput.capturePhoto(with: settings, delegate: self)
     }
     
     @IBAction func presentPhotoPicker() {
