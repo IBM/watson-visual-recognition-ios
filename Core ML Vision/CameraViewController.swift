@@ -99,9 +99,8 @@ class CameraViewController: UIViewController {
         ListItem(id: "food", name: "food")
     ]
     
-    var editedImage = UIImage()
     var originalConfs = [ClassResult]()
-    var heatmaps = [String: HeatmapImages]()
+    var heatmaps = [String: VisualRecognition.Heatmap]()
     var selectionIndex = 0
     var classifiers = [ListItem]()
     var isLoading = false
@@ -151,11 +150,9 @@ class CameraViewController: UIViewController {
     // MARK: - Image Classification
     
     func classifyImage(_ image: UIImage, localThreshold: Double = 0.0) {
-        guard let croppedImage = cropToCenter(image: image, targetSize: CGSize(width: 224, height: 224)) else {
+        guard let croppedImage = image.cropToCenter(targetSize: CGSize(width: 224, height: 224)) else {
             return
         }
-        
-        editedImage = croppedImage
         
         showResultsUI(for: image)
         
@@ -165,163 +162,28 @@ class CameraViewController: UIViewController {
         
         do {
             let _ = try visualRecognition.getLocalModel(classifierID: classifierId)
-            visualRecognition.classifyWithLocalModel(image: editedImage, classifierIDs: [classifierId], threshold: localThreshold) { classifiedImages, error in
-                // Make sure that an image was successfully classified.
-                guard let classifications = classifiedImages?.images.first?.classifiers.first?.classes else {
-                    return
-                }
-                
+            visualRecognition.classifyWithLocalModel(image: croppedImage, classifierIDs: [classifierId], threshold: localThreshold) { classifiedImages, error in
                 DispatchQueue.main.async {
-                    self.push(results: classifications)
-                }
-                
-                self.originalConfs = classifications
-            }
-        } catch {
-            visualRecognition.classify(image: editedImage, threshold: localThreshold, classifierIDs: [classifierId]) { response, error in
-                // Make sure that an image was successfully classified.
-                guard let classifications = response?.result?.images.first?.classifiers.first?.classes else {
-                    return
-                }
-                
-                DispatchQueue.main.async {
-                    self.push(results: classifications)
-                }
-                
-                self.originalConfs = classifications
-            }
-        }
-    }
-    
-    func startAnalysis(classToAnalyze: String, localThreshold: Double = 0.0) {
-        if let heatmapImages = heatmaps[classToAnalyze] {
-            heatmapView.image = heatmapImages.heatmap
-            outlineView.image = heatmapImages.outline
-            return
-        }
-        
-        var confidences = [[Double]](repeating: [Double](repeating: -1, count: 17), count: 17)
-        
-        DispatchQueue.main.async {
-            SwiftSpinner.show("analyzing")
-        }
-        
-        let chosenClasses = originalConfs.filter({ return $0.className == classToAnalyze })
-        guard let chosenClass = chosenClasses.first else {
-            return
-        }
-        let originalConf = Double(chosenClass.score)
-        
-        let dispatchGroup = DispatchGroup()
-        dispatchGroup.enter()
-        
-        DispatchQueue.global(qos: .background).async {
-            for down in 0 ..< 11 {
-                for right in 0 ..< 11 {
-                    confidences[down + 3][right + 3] = 0
-                    dispatchGroup.enter()
-                    let maskedImage = self.maskImage(image: self.editedImage, at: CGPoint(x: right, y: down))
-                    
-                    guard let classifierId = UserDefaults.standard.string(forKey: "classifier_id") else {
+                    // Make sure that an image was successfully classified.
+                    guard let classifications = classifiedImages?.images.first?.classifiers.first?.classes else {
                         return
                     }
-                    self.visualRecognition.classifyWithLocalModel(image: maskedImage, classifierIDs: [classifierId], threshold: localThreshold) { [down, right] classifiedImages, _ in
-                        
-                        defer { dispatchGroup.leave() }
-                        
-                        // Make sure that an image was successfully classified.
-                        guard let classifications = classifiedImages?.images.first?.classifiers.first?.classes else {
-                            return
-                        }
-                        
-                        let usbClass = classifications.filter({ return $0.className == classToAnalyze })
-                        
-                        guard let usbClassSingle = usbClass.first else {
-                                return
-                        }
-                        
-                        let score = Double(usbClassSingle.score)
-                        
-                        print(".", terminator: "")
-                        
-                        confidences[down + 3][right + 3] = score
+                    self.push(results: classifications)
+                    self.originalConfs = classifications
+                }
+            }
+        } catch {
+            visualRecognition.classify(image: croppedImage, threshold: localThreshold, classifierIDs: [classifierId]) { response, error in
+                DispatchQueue.main.async {
+                    // Make sure that an image was successfully classified.
+                    guard let classifications = response?.result?.images.first?.classifiers.first?.classes else {
+                        return
                     }
+                    self.push(results: classifications)
+                    self.originalConfs = classifications
                 }
             }
-            dispatchGroup.leave()
-            
-            dispatchGroup.notify(queue: .main) {
-                print()
-                print(confidences)
-                
-                guard let image = self.imageView.image else {
-                    return
-                }
-                
-                let heatmap = self.calculateHeatmap(confidences, originalConf)
-                let heatmapImage = self.renderHeatmap(heatmap, color: .black, size: image.size)
-                let outlineImage = self.renderOutline(heatmap, size: image.size)
-                
-                let heatmapImages = HeatmapImages(heatmap: heatmapImage, outline: outlineImage)
-                self.heatmaps[classToAnalyze] = heatmapImages
-                
-                self.heatmapView.image = heatmapImage
-                self.outlineView.image = outlineImage
-                self.heatmapView.alpha = CGFloat(self.alphaSlider.value)
-                
-                self.heatmapView.isHidden = false
-                self.outlineView.isHidden = false
-                self.alphaSlider.isHidden = false
-                
-                SwiftSpinner.hide()
-            }
         }
-    }
-    
-    func maskImage(image: UIImage, at point: CGPoint) -> UIImage {
-        let size = image.size
-        UIGraphicsBeginImageContextWithOptions(size, false, UIScreen.main.scale)
-        
-        image.draw(at: .zero)
-        
-        let rectangle = CGRect(x: point.x * 16, y: point.y * 16, width: 64, height: 64)
-        
-        UIColor(red: 1, green: 0, blue: 1, alpha: 1).setFill()
-        UIRectFill(rectangle)
-        
-        let newImage = UIGraphicsGetImageFromCurrentImageContext()!
-        UIGraphicsEndImageContext()
-        return newImage
-    }
-    
-    func cropToCenter(image: UIImage, targetSize: CGSize) -> UIImage? {
-        guard let cgImage = image.cgImage else {
-            return nil
-        }
-        
-        let offset = abs(CGFloat(cgImage.width - cgImage.height) / 2)
-        let newSize = CGFloat(min(cgImage.width, cgImage.height))
-        
-        let cropRect: CGRect
-        if cgImage.width < cgImage.height {
-            cropRect = CGRect(x: 0.0, y: offset, width: newSize, height: newSize)
-        } else {
-            cropRect = CGRect(x: offset, y: 0.0, width: newSize, height: newSize)
-        }
-        
-        guard let cropped = cgImage.cropping(to: cropRect) else {
-            return nil
-        }
-        
-        let image = UIImage(cgImage: cropped, scale: image.scale, orientation: image.imageOrientation)
-        let resizeRect = CGRect(x: 0, y: 0, width: targetSize.width, height: targetSize.height)
-        
-        UIGraphicsBeginImageContextWithOptions(targetSize, false, 1.0)
-        image.draw(in: resizeRect)
-        let newImage = UIGraphicsGetImageFromCurrentImageContext()!
-        UIGraphicsEndImageContext()
-        
-        return newImage
     }
     
     func dismissResults() {
@@ -353,7 +215,7 @@ class CameraViewController: UIViewController {
     }
     
     func resetUI() {
-        heatmaps = [String: HeatmapImages]()
+        heatmaps = [String: VisualRecognition.Heatmap]()
         if captureSession != nil {
             simulatorTextView.isHidden = true
             imageView.isHidden = true
@@ -430,18 +292,13 @@ class CameraViewController: UIViewController {
             if !modelUpToDate {
                 SwiftSpinner.show("Compiling model...")
                 self.visualRecognition.updateLocalModel(classifierID: modelId) { response, error in
-                    defer {
-                        DispatchQueue.main.async {
-                            SwiftSpinner.hide()
-                            self.updateModelButton.isHidden = true
-                        }
-                    }
-                    
-                    guard let error = error else {
-                        return
-                    }
-                    
                     DispatchQueue.main.async {
+                        defer { SwiftSpinner.hide() }
+                        
+                        guard let error = error else {
+                            self.updateModelButton.isHidden = true
+                            return
+                        }
                         self.modelUpdateFail(modelId: modelId, error: error)
                     }
                 }
@@ -486,13 +343,6 @@ class CameraViewController: UIViewController {
     
     @IBAction func reset() {
         resetUI()
-    }
-    
-    // MARK: - Structs
-    
-    struct HeatmapImages {
-        let heatmap: UIImage
-        let outline: UIImage
     }
 }
 
@@ -568,12 +418,35 @@ extension CameraViewController: AVCapturePhotoCaptureDelegate {
 
 extension CameraViewController: TableViewControllerSelectionDelegate {
     func didSelectItem(_ name: String) {
+        if let heatmap = heatmaps[name] {
+            heatmapView.image = heatmap.heatmap
+            outlineView.image = heatmap.outline
+            return
+        }
+
         guard let classifierId = UserDefaults.standard.string(forKey: "classifier_id") else {
             return
         }
         do {
             let _ = try visualRecognition.getLocalModel(classifierID: classifierId)
-            startAnalysis(classToAnalyze: name)
+            guard let image = imageView.image else {
+                return
+            }
+            SwiftSpinner.show("analyzing")
+            visualRecognition.generateHeatmap(image: image, classifierId: classifierId, className: name) { heatmap in
+                DispatchQueue.main.async {
+                    SwiftSpinner.hide()
+                    self.heatmaps[name] = heatmap
+                    
+                    self.heatmapView.image = heatmap.heatmap
+                    self.outlineView.image = heatmap.outline
+                    self.heatmapView.alpha = CGFloat(self.alphaSlider.value)
+                    
+                    self.heatmapView.isHidden = false
+                    self.outlineView.isHidden = false
+                    self.alphaSlider.isHidden = false
+                }
+            }
         } catch {
             return
         }
@@ -620,18 +493,5 @@ extension CameraViewController: AKPickerViewDelegate {
             UserDefaults.standard.set(classifierId, forKey: "classifier_id")
         }
         invalidateStatus()
-    }
-}
-
-extension String {
-    func truncate(to length: Int) -> String {
-        if self.count > length {
-            var newString = self
-            let range = NSRange(location: length / 2, length: self.count - length)
-            newString.replaceSubrange(Range(range, in: newString)!, with: "...")
-            return newString
-        } else {
-            return self
-        }
     }
 }

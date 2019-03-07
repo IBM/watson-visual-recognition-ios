@@ -1,13 +1,31 @@
 //
-//  Analyzer.swift
+//  Heatmap.swift
 //  Core ML Vision
 //
-//  Created by Nicholas Bourdakos on 8/17/18.
+//  Created by Nicholas Bourdakos on 3/7/19.
 //
 
 import UIKit
+import VisualRecognitionV3
 
-extension CameraViewController  {
+extension UIImage {
+    func mask(at point: CGPoint) -> UIImage {
+        UIGraphicsBeginImageContextWithOptions(self.size, false, UIScreen.main.scale)
+        
+        self.draw(at: .zero)
+        
+        let rectangle = CGRect(x: point.x * 16, y: point.y * 16, width: 64, height: 64)
+        
+        UIColor(red: 1, green: 0, blue: 1, alpha: 1).setFill()
+        UIRectFill(rectangle)
+        
+        let newImage = UIGraphicsGetImageFromCurrentImageContext()!
+        UIGraphicsEndImageContext()
+        return newImage
+    }
+}
+
+extension VisualRecognition {
     private struct Point: Hashable {
         var x: Int
         var y: Int
@@ -29,7 +47,7 @@ extension CameraViewController  {
         case up, right, down, left
     }
     
-    func renderOutline(_ heatmap: [[CGFloat]], size: CGSize) -> UIImage {
+    private func renderOutline(_ heatmap: [[CGFloat]], size: CGSize) -> UIImage {
         UIGraphicsBeginImageContextWithOptions(size, false, UIScreen.main.scale)
         
         let scale = size.width / 14
@@ -203,7 +221,7 @@ extension CameraViewController  {
         }
     }
     
-    func calculateHeatmap(_ confidences: [[Double]], _ originalConf: Double) -> [[CGFloat]] {
+    private func calculateHeatmap(_ confidences: [[Double]], _ originalConf: Double) -> [[CGFloat]] {
         var minVal: CGFloat = 1.0
         
         var heatmap = [[CGFloat]](repeating: [CGFloat](repeating: -1, count: 14), count: 14)
@@ -252,7 +270,7 @@ extension CameraViewController  {
         return heatmap
     }
     
-    func renderHeatmap(_ heatmap: [[CGFloat]], color: UIColor, size: CGSize) -> UIImage {
+    private func renderHeatmap(_ heatmap: [[CGFloat]], color: UIColor, size: CGSize) -> UIImage {
         UIGraphicsBeginImageContextWithOptions(size, false, UIScreen.main.scale)
         
         let scale = size.width / 14
@@ -276,5 +294,62 @@ extension CameraViewController  {
         let newImage = UIGraphicsGetImageFromCurrentImageContext()!
         UIGraphicsEndImageContext()
         return newImage
+    }
+    
+    struct Heatmap {
+        let heatmap: UIImage
+        let outline: UIImage
+    }
+    
+    func generateHeatmap(image: UIImage, classifierId: String, className: String, localThreshold: Double = 0.0, completionHandler: @escaping (Heatmap) -> Void) {
+        guard let croppedImage = image.cropToCenter(targetSize: CGSize(width: 224, height: 224)) else {
+            return
+        }
+        
+        var confidences = [[Double]](repeating: [Double](repeating: -1, count: 17), count: 17)
+        
+        let dispatchGroup = DispatchGroup()
+        dispatchGroup.enter()
+        
+        DispatchQueue.global(qos: .background).async {
+            for down in 0 ..< 11 {
+                for right in 0 ..< 11 {
+                    confidences[down + 3][right + 3] = 0
+                    dispatchGroup.enter()
+                    let maskedImage = croppedImage.mask(at: CGPoint(x: right, y: down))
+                    self.classifyWithLocalModel(image: maskedImage, classifierIDs: [classifierId], threshold: localThreshold) { [down, right] classifiedImages, _ in
+                        
+                        defer { dispatchGroup.leave() }
+                        
+                        // Make sure that an image was successfully classified.
+                        guard let classifications = classifiedImages?.images.first?.classifiers.first?.classes, let classResult = classifications.first(where: { $0.className == className }) else {
+                            return
+                        }
+                        
+                        confidences[down + 3][right + 3] = classResult.score
+                        print(".", terminator: "")
+                    }
+                }
+            }
+            dispatchGroup.leave()
+            
+            dispatchGroup.notify(queue: .main) {
+                print("\n\(confidences)")
+                
+                self.classifyWithLocalModel(image: croppedImage, classifierIDs: [classifierId], threshold: localThreshold) { classifiedImages, error in
+                    // Make sure that an image was successfully classified.
+                    guard let classifications = classifiedImages?.images.first?.classifiers.first?.classes, let classResult = classifications.first(where: { $0.className == className }) else {
+                        return
+                    }
+                    
+                    let heatmapScores = self.calculateHeatmap(confidences, classResult.score)
+                    let heatmapImage = self.renderHeatmap(heatmapScores, color: .black, size: image.size)
+                    let outlineImage = self.renderOutline(heatmapScores, size: image.size)
+                    
+                    let heatmap = Heatmap(heatmap: heatmapImage, outline: outlineImage)
+                    completionHandler(heatmap)
+                }
+            }
+        }
     }
 }
