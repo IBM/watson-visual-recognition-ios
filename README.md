@@ -28,7 +28,7 @@ carthage update --platform iOS
 ```
 
 ### Credentials
-Add your Visual Recognition API key to the `Credentials.plist`:
+Add your Visual Recognition API key to the [`Credentials.plist`](https://github.com/IBM/watson-visual-recognition-ios/blob/master/Core%20ML%20Vision/Credentials.plist):
 ```plist
 <key>apiKey</key>
 <string>YOUR_API_KEY</string>
