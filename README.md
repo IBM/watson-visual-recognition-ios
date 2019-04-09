@@ -28,8 +28,10 @@ carthage update --platform iOS
 ```
 
 ### Credentials
-Add your Visual Recognition API key to the `.credentials.plist`
+Add your Visual Recognition API key to the `Credentials.plist`:
 ```
+<key>apiKey</key>
+<string>YOUR_API_KEY</string>
 ```
 
 ## Install Xcode
