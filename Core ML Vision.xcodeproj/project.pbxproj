@@ -11,8 +11,6 @@
 		23074FB62177A30500F43ECA /* VisualRecognitionConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23074FB52177A30500F43ECA /* VisualRecognitionConstants.swift */; };
 		23955695222DC97B009275B1 /* RestKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 23955691222DC974009275B1 /* RestKit.framework */; };
 		23955696222DC97B009275B1 /* RestKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 23955691222DC974009275B1 /* RestKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		23955697222DC97B009275B1 /* VisualRecognitionV3.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 23955692222DC974009275B1 /* VisualRecognitionV3.framework */; };
-		23955698222DC97B009275B1 /* VisualRecognitionV3.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 23955692222DC974009275B1 /* VisualRecognitionV3.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		2395569A222DCF5F009275B1 /* VisualRecognition+checkLocalModelStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23955699222DCF5F009275B1 /* VisualRecognition+checkLocalModelStatus.swift */; };
 		23B0A77920A3888B00D02B06 /* UIViewController+PulleyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23B0A77820A3888B00D02B06 /* UIViewController+PulleyViewController.swift */; };
 		23B0A77B20A3A7FB00D02B06 /* Credentials.plist in Resources */ = {isa = PBXBuildFile; fileRef = 23B0A77A20A3A7FB00D02B06 /* Credentials.plist */; };
@@ -32,6 +30,8 @@
 		2DBEDF461FD20680003F17C8 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2DBEDF451FD20672003F17C8 /* Main.storyboard */; };
 		2DC5F13D1FD609050063B2D5 /* ResultsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DC5F13C1FD609050063B2D5 /* ResultsTableViewController.swift */; };
 		2DC5F13F1FD6093B0063B2D5 /* ResultsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DC5F13E1FD6093B0063B2D5 /* ResultsTableViewCell.swift */; };
+		3A29C7FC2282011000E5499D /* VisualRecognitionV3.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3A29C7FB2282011000E5499D /* VisualRecognitionV3.framework */; };
+		3A29C7FD2282011000E5499D /* VisualRecognitionV3.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 3A29C7FB2282011000E5499D /* VisualRecognitionV3.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -42,7 +42,7 @@
 			dstSubfolderSpec = 10;
 			files = (
 				23955696222DC97B009275B1 /* RestKit.framework in Embed Frameworks */,
-				23955698222DC97B009275B1 /* VisualRecognitionV3.framework in Embed Frameworks */,
+				3A29C7FD2282011000E5499D /* VisualRecognitionV3.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -75,6 +75,7 @@
 		2DBEDF451FD20672003F17C8 /* Main.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		2DC5F13C1FD609050063B2D5 /* ResultsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultsTableViewController.swift; sourceTree = "<group>"; };
 		2DC5F13E1FD6093B0063B2D5 /* ResultsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultsTableViewCell.swift; sourceTree = "<group>"; };
+		3A29C7FB2282011000E5499D /* VisualRecognitionV3.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = VisualRecognitionV3.framework; path = Carthage/Build/iOS/VisualRecognitionV3.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -83,7 +84,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				23955695222DC97B009275B1 /* RestKit.framework in Frameworks */,
-				23955697222DC97B009275B1 /* VisualRecognitionV3.framework in Frameworks */,
+				3A29C7FC2282011000E5499D /* VisualRecognitionV3.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -136,6 +137,7 @@
 		2DBDD2881FCF7FAE004A6DC1 = {
 			isa = PBXGroup;
 			children = (
+				3A29C7FB2282011000E5499D /* VisualRecognitionV3.framework */,
 				2DBDD2931FCF7FAE004A6DC1 /* Core ML Vision */,
 				2DBDD2921FCF7FAE004A6DC1 /* Products */,
 				23955690222DC974009275B1 /* Frameworks */,
