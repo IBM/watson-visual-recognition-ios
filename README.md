@@ -73,7 +73,7 @@ Copy the *API Key* from the credentials and add it to [`Credentials.plist`](http
 
 ```plist
 <key>apiKey</key>
-<string>Rnqw721s...0m8aPu</string>
+<string>YOUR_API_KEY</string>
 ```
 
 ### 4. Run the app with Xcode
