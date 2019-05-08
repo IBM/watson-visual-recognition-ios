@@ -1,4 +1,4 @@
-# Watson Visual Recognition iOS App
+# Create an iOS app that uses built-in and custom Watson Visual Recognition classifiers
 
 This is an iOS application that showcases various out of the box classifier available with the Watson Visual Recognition service on IBM Cloud.
 
