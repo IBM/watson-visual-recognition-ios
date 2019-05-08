@@ -1,5 +1,5 @@
 # Don't put your credentials on GitHub
-# Credentials.plist
+Watson\ Vision/Credentials.plist
 
 *.mlmodel
 
