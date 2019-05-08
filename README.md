@@ -69,11 +69,11 @@ Create the following services:
 
   * [**Watson Visual Recognition**](https://cloud.ibm.com/catalog/services/visual-recognition)
 
-Copy the *API Key* from the credentials and add it to [`Credentials.plist`](https://github.com/IBM/watson-visual-recognition-ios/blob/master/Core%20ML%20Vision/Credentials.plist)
+Copy the *API Key* from the credentials and add it to [`Credentials.plist`](https://github.com/IBM/watson-visual-recognition-ios/blob/master/Watson%20Vision/Credentials.plist)
 
 ![Credentials](docs/images/vizrec-creds.gif)
 
-#### [`Credentials.plist`](https://github.com/IBM/watson-visual-recognition-ios/blob/master/Core%20ML%20Vision/Credentials.plist)
+#### [`Credentials.plist`](https://github.com/IBM/watson-visual-recognition-ios/blob/master/Watson%20Vision/Credentials.plist)
 
 ```plist
 <key>apiKey</key>
