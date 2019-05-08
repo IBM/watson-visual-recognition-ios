@@ -5,14 +5,13 @@ This is an iOS application that showcases various out of the box classifier avai
 This app has support for the following features of Watson Visual Recognition:
 
 * [General](https://cloud.ibm.com/apidocs/visual-recognition#classify-an-image): Watson Visual Recognition's default classification, it will return the confidence of an image from thousands of classes.
-* [Faces](https://cloud.ibm.com/apidocs/visual-recognition#detect-faces-in-an-image): Facial analysis with age and gender, includes coordinates of the face in the image.
 * Explicit: Returns percent confidence of whether an image is inappropriate for general use.
 * Food: A classifier intended for images of food items.
 * [Custom classifier(s)](https://cloud.ibm.com/apidocs/visual-recognition#create-a-classifier): Gives the user the ability to create their own classifier.
 
-| General | Faces | Explicit | Food | Custom |
+| General | Explicit | Food | Custom |
 | - | - | - | - | - |
-| ![](docs/images/general.png) | ![](docs/images/faces.png) | :upside_down_face: :no_entry_sign: | ![](docs/images/food.png) | ![](docs/images/custom.png) |
+| ![](docs/images/general.png) | :upside_down_face: :no_entry_sign: | ![](docs/images/food.png) | ![](docs/images/custom.png) |
 
 ## Architecture
 

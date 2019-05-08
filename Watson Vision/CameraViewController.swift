@@ -91,7 +91,7 @@ class CameraViewController: UIViewController {
     
     let defaultClassifiers = [
         ListItem(id: "default", name: "general"),
-        ListItem(id: "detect_faces", name: "faces"),
+        // ListItem(id: "detect_faces", name: "faces"),
         ListItem(id: "explicit", name: "explicit"),
         ListItem(id: "food", name: "food")
     ]
@@ -165,7 +165,9 @@ class CameraViewController: UIViewController {
         guard let classifierId = UserDefaults.standard.string(forKey: "classifier_id") else {
             return
         }
-        
+
+        // we are no longer supporting face detection, remove this maybe, but the code
+        // is still useful for creating bounding boxes
         if classifierId == "detect_faces" {
             SwiftSpinner.show("detecting")
             visualRecognition.detectFaces(image: image) { response, error in
