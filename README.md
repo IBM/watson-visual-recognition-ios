@@ -9,9 +9,9 @@ This app has support for the following features of Watson Visual Recognition:
 * Food: A classifier intended for images of food items.
 * [Custom classifier(s)](https://cloud.ibm.com/apidocs/visual-recognition#create-a-classifier): Gives the user the ability to create their own classifier.
 
-| General | Explicit | Food | Custom |
-| - | - | - | - | - |
-| ![](docs/images/general.png) | :upside_down_face: :no_entry_sign: | ![](docs/images/food.png) | ![](docs/images/custom.png) |
+| General | Food | Explicit | Custom |
+| - | - | - | - |
+| ![](docs/images/general.png) | ![](docs/images/food.png) | :upside_down_face: :no_entry_sign: | ![](docs/images/custom.png) |
 
 ## Architecture
 
