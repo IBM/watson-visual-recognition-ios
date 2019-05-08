@@ -1,6 +1,6 @@
 # Watson Visual Recognition iOS App
 
-This is an iOS application that showcases various out of the box classifier available with the Watson Visual Recognition service on IBM Cloud. 
+This is an iOS application that showcases various out of the box classifier available with the Watson Visual Recognition service on IBM Cloud.
 
 This app has support for the following features of Watson Visual Recognition:
 
@@ -9,6 +9,10 @@ This app has support for the following features of Watson Visual Recognition:
 * Explicit: Returns percent confidence of whether an image is inappropriate for general use.
 * Food: A classifier intended for images of food items.
 * [Custom classifier(s)](https://cloud.ibm.com/apidocs/visual-recognition#create-a-classifier): Gives the user the ability to create their own classifier.
+
+| General | Faces | Explicit | Food | Custom |
+| - | - | - | - | - |
+| ![](docs/images/general.png) | ![](docs/images/faces.png) | :upside_down_face: :no_entry_sign: | ![](docs/images/food.png) | ![](docs/images/custom.png) |
 
 ## Architecture
 
@@ -81,7 +85,7 @@ Copy the *API Key* from the credentials and add it to [`Credentials.plist`](http
 Launch Xcode using the terminal:
 
 ```bash
-open "Core ML Vision.xcodeproj"
+open "Watson Vision.xcodeproj"
 ```
 
 #### Test the application in the simulator
@@ -91,8 +95,6 @@ To run in the simulator, select an iOS device from the dropdown and click the **
 ![Xcode build and run](https://d2mxuefqeaa7sj.cloudfront.net/s_50BD1551C2CA022B9CF9D8DF0A28275DB7ACF3DBDD5764C0CB12B3AF3B1E0766_1541996500409_Screen+Shot+2018-11-11+at+10.25.24+PM2.png)
 
 You should now be able to drag and drop pictures into the photo gallery and select these photos from the app.
-
-![sim demo](docs/video/sim-demo.gif)
 
 > **Tip**: :bulb: Custom classifiers will appear in the slider based on the classifier name.
 
@@ -107,25 +109,29 @@ To do this, we need to sign the application, the first step here is to authentic
 
    ![Add account](https://bourdakos1.github.io/deprecated-cloud-annotations/assets/add_account.png)
 
-1. Login with your Apple ID and password
+1. Login with your Apple ID and password.
 
 Now we have to create a certificate to sign our app, in the same **General** tab do the following:
 
-1. Still in the **General** tab of the project editor, change the **bundle identifier** to `com.<YOUR_LAST_NAME>.Core-ML-Vision`
+1. Still in the **General** tab of the project editor, change the **bundle identifier** to `com.<YOUR_LAST_NAME>.Core-ML-Vision`.
 
    ![Build Identifier](https://bourdakos1.github.io/deprecated-cloud-annotations/assets/change_identifier.png)
 
-1. Select the personal team that was just created from the **Team** dropdown
-1. Plug in your iOS device
-1. Select your device from the device menu to the right of the **build and run** icon
-1. Click **build and run**
-1. On your device, you should see the app appear as an installed appear
-1. When you try to run the app the first time, it will prompt you to approve the developer
-1. In your iOS settings navigate to ***General > Device Management***
-1. Tap your email, tap **trust**
+1. Select the personal team that was just created from the **Team** dropdown.
+1. Plug in your iOS device.
+1. Select your device from the device menu to the right of the **build and run** icon.
+1. Click **build and run**.
+1. On your device, you should see the app appear as an installed appear.
+1. When you try to run the app the first time, it will prompt you to approve the developer.
+1. In your iOS settings navigate to ***General > Device Management***.
+1. Tap your email, tap **trust**.
 1. Now you're ready to use the app!
 
-![app demo](docs/video/app-demo.gif)
+## Demo
+
+| Using the simulator | Using the camera |
+| - | - |
+| ![](docs/video/sim-demo.gif) | ![](docs/video/app-demo.gif) |
 
 ## License
 
