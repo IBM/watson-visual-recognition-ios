@@ -1,6 +1,6 @@
 # Create an iOS app that uses built-in and custom Watson Visual Recognition classifiers
 
-This is an iOS application that showcases various out of the box classifier available with the Watson Visual Recognition service on IBM Cloud.
+This is an iOS application that showcases various out of the box classifier available with the Watson Visual Recognition service on IBM Cloud. 
 
 This app has support for the following features of Watson Visual Recognition:
 
@@ -35,6 +35,8 @@ This app has support for the following features of Watson Visual Recognition:
 * [IBM Cloud](https://cloud.ibm.com) account.
 
 > **Note**: :bulb: You can use the free/lite tier of IBM Cloud to use this code!
+
+> **(Optional)** If you want to build your own custom classifier, you can follow along [this pattern](https://developer.ibm.com/patterns/deploy-a-core-ml-model-with-watson-visual-recognition/), [this video](https://www.youtube.com/watch?v=zY-2aCV894w), or [this tutorial](https://developer.ibm.com/tutorials/watson-visual-recognition-with-core-ml-single-model/).
 
 ## Steps
 
