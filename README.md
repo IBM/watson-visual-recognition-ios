@@ -4,8 +4,9 @@
 
 # Create an iOS app that uses built-in and custom Watson Visual Recognition classifiers
 
-> **Note: This pattern has now been deprecated because it uses Watson Visual Recognition which is discontinued. Existing instances are supported until 1 December 2021, but as of 7 January 2021, you can't create instances. Any instance that is provisioned on 1 December 2021 will be deleted. Please view the [Maximo Visual Inspection trial](https://www.ibm.com/support/pages/ibm-maximo-visual-inspection) as a way 
-to get started with image classification.
+> **Note: This pattern has now been deprecated because it uses Watson Visual Recognition which is discontinued. Existing instances are supported until 1 December 2021, but as of 7 January 2021, you can't create instances. Any instance that is provisioned on 1 December 2021 will be deleted. Please view the [Maximo Visual Inspection](https://www.ibm.com/support/pages/ibm-maximo-visual-inspection) as a way 
+to get started with image classification. Another alternative to train computer vision 
+models is [Cloud Annotations](https://cloud.annotations.ai/).
 
 This is an iOS application that showcases various out of the box classifier available with the Watson Visual Recognition service on IBM Cloud. 
 
